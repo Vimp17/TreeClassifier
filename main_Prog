@@ -29,3 +29,6 @@ df_test_cut = df_test[['Growth', 'Weight','Sex', 'Hair length', 'Children number
 df_test_cut = df_test_cut.dropna()
 df_test_cut['Predict'] = model.predict(df_test_cut[['Growth', 'Weight','Hair length', 'Children number']].values.reshape(-1,4))
 pd.crosstab(df_test_cut['Predict'],df_test_cut['Sex'])
+from sklearn.metrics import precision_recall_fscore_support
+
+precision_recall_fscore_support(df_test_cut['Sex'], df_test_cut['Predict'])
