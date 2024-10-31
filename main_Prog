@@ -1,0 +1,31 @@
+import pandas as pd
+
+df = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/students.csv', delimiter =',')
+df_test = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/students_test.csv', delimiter=',')
+
+from sklearn import tree
+import seaborn as sns
+
+df_cut = df[['Growth', 'Weight','Sex', 'Hair length', 'Children number']]
+df_cut = df_cut.dropna()
+
+model = tree.DecisionTreeClassifier(max_depth=3)
+model.fit(df_cut[['Growth', 'Weight','Hair length', 'Children number']].values.reshape(-1,4), y=df_cut['Sex'].values)
+
+#vizualization
+'''
+import graphviz
+from sklearn.tree import export_graphviz
+
+dot_data = export_graphviz(model, out_file=None, 
+                           feature_names=['Growth', 'Weight','Hair length', 'Children number'],  
+                           class_names=['f', 'm'],  
+                           filled=True, rounded=True,  
+                           special_characters=True)  
+graph = graphviz.Source(dot_data) 
+graph
+'''
+df_test_cut = df_test[['Growth', 'Weight','Sex', 'Hair length', 'Children number']]
+df_test_cut = df_test_cut.dropna()
+df_test_cut['Predict'] = model.predict(df_test_cut[['Growth', 'Weight','Hair length', 'Children number']].values.reshape(-1,4))
+pd.crosstab(df_test_cut['Predict'],df_test_cut['Sex'])
